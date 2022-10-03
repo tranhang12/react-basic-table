@@ -1,7 +1,10 @@
 import React from 'react'
 
-export const GlobalFilter = () => {
+export const GlobalFilter = ({filter, setFilter}) => {
   return (
-    <div>GlobalFilter</div>
+    <span>
+      Search: {' '}
+      <input value={filter || ''} onChange={(e) => setFilter(e.target.value)}/>
+    </span>
   )
 }
