@@ -4,7 +4,7 @@ import { COLUMNS } from './columns'
 import './table.css'
 import MOCK_DATA from './MOCK_DATA.json'
 
-const SortingTable = () => {
+export const SortingTable = () => {
   const columns = useMemo(() => COLUMNS, [])
   const data = useMemo(() => MOCK_DATA, [])
 
@@ -75,4 +75,4 @@ const SortingTable = () => {
       </table>
   )
 }
-export default SortingTable
+// export default SortingTable

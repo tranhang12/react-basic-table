@@ -1,9 +1,9 @@
 import ReactTable from 'react-table'
-import {PaginationTable} from './components/PaginationTable'
+import {BasicTable} from './components/BasicTable'
 function App() {
   return (
     <div className="App">
-      <PaginationTable />
+      <BasicTable />
     </div>
   );
 }
