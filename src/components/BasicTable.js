@@ -1,30 +1,42 @@
-import React, { useMemo } from "react";
+import React from "react";
+import { useRowSelect } from "react-table";
 import {
   useFilters,
   useGlobalFilter,
   useTable,
   useSortBy,
   usePagination,
+  useBlockLayout,
+  useResizeColumns,
 } from "react-table";
-import { COLUMNS } from "./columns";
 import "./table.css";
-import MOCK_DATA from "./MOCK_DATA.json";
 import { GlobalFilter } from "./GlobalFilter";
+import { IndeterminateCheckbox } from "./Checkbox";
 
+export const BasicTable = ({ columns, data }) => {
+  const [records, setRecords] = React.useState(data)
 
-export const BasicTable = () => {
-  const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => MOCK_DATA, []);
- 
+  const getRowId = React.useCallback(row => {
+    return row.id
+  }, [])
+
+  const defaultColumn = React.useMemo(
+    () => ({
+      minWidth: 30,
+      width: 150,
+      maxWidth: 400,
+    }),
+    []
+  );
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    footerGroups,
-    rows,
     prepareRow,
     state,
     setGlobalFilter,
+    //pagination
     page,
     nextPage,
     previousPage,
@@ -33,16 +45,50 @@ export const BasicTable = () => {
     pageOptions,
     gotoPage,
     pageCount,
+    //column resizing
     setPageSize,
+    resetResizing,
+    //colum hiding
+    allColumns,
+    getToggleHideAllColumnsProps,
+    // selectedFlatRows,
+    // state: { selectedRowIds },
   } = useTable(
     {
       columns,
-      data,
+      data: records,
+      defaultColumn,
     },
     useFilters,
     useGlobalFilter,
     useSortBy,
     usePagination,
+    useBlockLayout,
+    useResizeColumns,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => [
+        // Let's make a column for selection
+        {
+          id: "selection",
+          // The header can use the table's getToggleAllRowsSelectedProps method
+          // to render a checkbox
+          Header: ({ getToggleAllRowsSelectedProps }) => (
+            <div>
+              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+            </div>
+          ),
+          // The cell can use the individual row's getToggleRowSelectedProps method
+          // to the render a checkbox
+          Cell: ({ row }) => (
+            <div>
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+            </div>
+          ),
+        },
+        ...columns,
+      ]);
+    }
   );
 
   const { globalFilter } = state;
@@ -51,7 +97,24 @@ export const BasicTable = () => {
   return (
     <>
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-      
+      {/* column hiding */}
+      <div>
+        <div>
+          <IndeterminateCheckbox {...getToggleHideAllColumnsProps()} /> Toggle
+          All
+        </div>
+        {allColumns.map(column => (
+          <div key={column.id}>
+            <label>
+              <input type="checkbox" {...column.getToggleHiddenProps()} />{' '}
+              {column.id}
+            </label>
+          </div>
+        ))}
+        <br />
+      </div>
+      {/* column resizing */}
+      <button onClick={resetResizing}>Reset Resizing</button>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -59,7 +122,6 @@ export const BasicTable = () => {
               {headerGroup.headers.map((column) => (
                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render("Header")}
-                  {/* <div>{column.canFilter ? column.render("Filter") : null}</div> */}
                   <span>
                     {column.isSorted
                       ? column.isSortedDesc
@@ -67,6 +129,12 @@ export const BasicTable = () => {
                         : " 🔼"
                       : ""}
                   </span>
+                  <div
+                    {...column.getResizerProps()}
+                    className={`resizer ${
+                      column.isResizing ? "isResizing" : ""
+                    }`}
+                  ></div>
                 </th>
               ))}
             </tr>
@@ -99,8 +167,23 @@ export const BasicTable = () => {
         </tfoot> */}
       </table>
 
+      {/* <p>Selected Rows: {Object.keys(selectedRowIds).length}</p>
+      <pre>
+        <code>
+          {JSON.stringify(
+            {
+              selectedRowIds: selectedRowIds,
+              "selectedFlatRows[].original": selectedFlatRows.map(
+                (d) => d.original
+              ),
+            },
+            null,
+            2
+          )}
+        </code>
+      </pre> */}
+
       <div className="pagination">
-        
         <select
           value={pageSize}
           onChange={(e) => setPageSize(Number(e.target.value))}
@@ -118,7 +201,8 @@ export const BasicTable = () => {
           Previous
         </button>
         <span>
-            {' '}Page {''}
+          {" "}
+          Page {""}
           <input
             type="number"
             value={pageIndex + 1}
@@ -129,8 +213,8 @@ export const BasicTable = () => {
               gotoPage(pageNumber);
             }}
             style={{ width: "40px" }}
-          />{' '}
-          of {pageOptions.length} {' '}
+          />{" "}
+          of {pageOptions.length}{" "}
         </span>
         <button onClick={() => nextPage()} disabled={!canNextPage}>
           Next
@@ -139,7 +223,6 @@ export const BasicTable = () => {
           {">>"}
         </button>
       </div>
-      
     </>
   );
 };
