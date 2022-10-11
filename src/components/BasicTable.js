@@ -1,11 +1,11 @@
 import React from "react";
-import { useRowSelect } from "react-table";
 import {
   useFilters,
   useGlobalFilter,
   useTable,
   useSortBy,
   usePagination,
+  useRowSelect,
   useBlockLayout,
   useResizeColumns,
 } from "react-table";
@@ -14,12 +14,6 @@ import { GlobalFilter } from "./GlobalFilter";
 import { IndeterminateCheckbox } from "./Checkbox";
 
 export const BasicTable = ({ columns, data }) => {
-  const [records, setRecords] = React.useState(data)
-
-  const getRowId = React.useCallback(row => {
-    return row.id
-  }, [])
-
   const defaultColumn = React.useMemo(
     () => ({
       minWidth: 30,
@@ -36,7 +30,7 @@ export const BasicTable = ({ columns, data }) => {
     prepareRow,
     state,
     setGlobalFilter,
-    //pagination
+    //--pagination
     page,
     nextPage,
     previousPage,
@@ -45,10 +39,10 @@ export const BasicTable = ({ columns, data }) => {
     pageOptions,
     gotoPage,
     pageCount,
-    //column resizing
+    //--column resizing
     setPageSize,
     resetResizing,
-    //colum hiding
+    //--colum hiding
     allColumns,
     getToggleHideAllColumnsProps,
     // selectedFlatRows,
@@ -56,7 +50,7 @@ export const BasicTable = ({ columns, data }) => {
   } = useTable(
     {
       columns,
-      data: records,
+      data,
       defaultColumn,
     },
     useFilters,
@@ -71,7 +65,6 @@ export const BasicTable = ({ columns, data }) => {
         // Let's make a column for selection
         {
           id: "selection",
-          // The header can use the table's getToggleAllRowsSelectedProps method
           // to render a checkbox
           Header: ({ getToggleAllRowsSelectedProps }) => (
             <div>
@@ -103,10 +96,10 @@ export const BasicTable = ({ columns, data }) => {
           <IndeterminateCheckbox {...getToggleHideAllColumnsProps()} /> Toggle
           All
         </div>
-        {allColumns.map(column => (
+        {allColumns.map((column) => (
           <div key={column.id}>
             <label>
-              <input type="checkbox" {...column.getToggleHiddenProps()} />{' '}
+              <input type="checkbox" {...column.getToggleHiddenProps()} />{" "}
               {column.id}
             </label>
           </div>
@@ -115,7 +108,7 @@ export const BasicTable = ({ columns, data }) => {
       </div>
       {/* column resizing */}
       <button onClick={resetResizing}>Reset Resizing</button>
-      <table {...getTableProps()}>
+      <table id="example" {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -129,6 +122,7 @@ export const BasicTable = ({ columns, data }) => {
                         : " 🔼"
                       : ""}
                   </span>
+
                   <div
                     {...column.getResizerProps()}
                     className={`resizer ${
