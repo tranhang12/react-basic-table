@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useTable, useGlobalFilter, useFilters } from "react-table";
 import { COLUMNS } from "./columns";
 import MOCK_DATA from "./MOCK_DATA.json";
@@ -18,6 +18,10 @@ const FilteringTable = () => {
     prepareRow,
     state,
     setGlobalFilter,
+    setFilter,
+    setAllFilters,
+    filterValue,
+    preFilteredRows,
   } = useTable(
     {
       columns,
@@ -27,10 +31,108 @@ const FilteringTable = () => {
     useGlobalFilter
   );
 
-  const { globalFilter } = state;
+  const { globalFilter, filters } = state;
+
+  // console.log("current filters", filters);
+
+  const handleClick = (e) => {
+    setAllFilters(
+      {
+        id: "id",
+        value: 12,
+      }
+      // {
+      //   id: "first_name",
+      //   value: "Enoch",
+      // }
+    );
+  };
+
   return (
     <div>
-      <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+      <div className={"container"}>
+        <div lassName={"row"}>
+          <div className={"col-25"}>
+            <label>ID: </label>
+          </div>
+          <div className={"col-75"}>
+            <input
+              type={"number"}
+              onChange={(e) => setFilter("id", e.target.value)}
+              placeholder="ID"
+            />
+          </div>
+        </div>
+        <div className={"row"}>
+          <div className={"col-25"}>
+            <label>First Name: </label>
+          </div>
+          <div className="col-75">
+            <input
+              type={"text"}
+              onChange={(e) => setFilter("first_name", e.target.value)}
+              placeholder="First name"
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-25">
+            <label>Last Name: </label>
+          </div>
+          <div className="col-75">
+            <input
+              type={"text"}
+              onChange={(e) => setFilter("last_name", e.target.value)}
+              placeholder="Last name"
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-25">
+            <label>Date of Birth: </label>
+          </div>
+          <div className="col-75">
+            <input
+              type={"date"}
+              onChange={(e) => setFilter("date_of_birth", e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-25">
+            <label>Country: </label>
+          </div>
+          <div className="col-75">
+            <input
+              type={"text"}
+              onChange={(e) => setFilter("country", e.target.value)}
+              placeholder="Country"
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-25">
+            <label>Phone: </label>
+          </div>
+          <div className="col-75">
+            <input
+              type={"phone"}
+              onChange={(e) => setFilter("phone", e.target.value)}
+              placeholder="Phone number"
+            />
+          </div>
+        </div>
+
+        <input type={"submit"} onClick={handleClick} value={"Search"} />
+      </div>
+
+      {/* <input />
+      <input /> */}
+      {/* <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} /> */}
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -38,7 +140,7 @@ const FilteringTable = () => {
               {headerGroup.headers.map((column) => (
                 <th {...column.getHeaderProps()}>
                   {column.render("Header")}
-                  <div>{column.canFilter ? column.render('Filter') : null}</div>
+                  {/* <div>{column.canFilter ? column.render("Filter") : null}</div> */}
                 </th>
               ))}
             </tr>

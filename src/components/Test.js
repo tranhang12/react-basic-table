@@ -1,19 +1,56 @@
-import React, { useRef, useState } from 'react'
+import React from "react";
+export const NumberRangeColumnFilter = ({
+  column: { filterValue = [], preFilteredRows, setFilter, id },
+}) => {
+  const [min, max] = React.useMemo(() => {
+    let min = preFilteredRows.length ? preFilteredRows[0].values[id] : 0;
+    let max = preFilteredRows.length ? preFilteredRows[0].values[id] : 0;
+    preFilteredRows.forEach((row) => {
+      min = Math.min(row.values[id], min);
+      max = Math.max(row.values[id], max);
+    });
+    return [min, max];
+  }, [id, preFilteredRows]);
 
-export const Test = () => {
-    const [numOfClicks, setNumOfClicks] = useState(0)
-    const numOfClicksRef = useRef(0);
-    const ref2 = useRef();
-    const handleClick = () => {
-        // setNumOfClicks(numOfClicks+1)
-        numOfClicksRef.current += 1;
-        // console.log(numOfClicksRef.current)
-        console.log(ref2)
-    }
   return (
-    <>
-    <p ref={ref2}>Number click: {numOfClicksRef.current}</p>
-    <button onClick={handleClick}>Click</button>
-    </>
-  )
-}
+    <div
+      style={{
+        display: "flex",
+      }}
+    >
+      <input
+        value={filterValue[0] || ""}
+        type="number"
+        onChange={(e) => {
+          const val = e.target.value;
+          setFilter((old = []) => [
+            val ? parseInt(val, 10) : undefined,
+            old[1],
+          ]);
+        }}
+        placeholder={`Min (${min})`}
+        style={{
+          width: "70px",
+          marginRight: "0.5rem",
+        }}
+      />
+      to
+      <input
+        value={filterValue[1] || ""}
+        type="number"
+        onChange={(e) => {
+          const val = e.target.value;
+          setFilter((old = []) => [
+            old[0],
+            val ? parseInt(val, 10) : undefined,
+          ]);
+        }}
+        placeholder={`Max (${max})`}
+        style={{
+          width: "70px",
+          marginLeft: "0.5rem",
+        }}
+      />
+    </div>
+  );
+};

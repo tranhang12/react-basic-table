@@ -16,7 +16,7 @@ function SearchForm() {
     }
 
     const submitButton = (e) =>{
-        setInputField(e.target.value)
+        console.log(e.target.value)
     }
 
     return (
