@@ -88,3 +88,11 @@ input[type=submit] {
   background-color: #04aa6d;
   color: white;
 }
+input[type=reset] {
+  width: 20%;
+  padding: 6px 10px;
+  margin: 6px 0;
+  box-sizing: border-box;
+  background-color: yellow;
+  color: black;
+}
