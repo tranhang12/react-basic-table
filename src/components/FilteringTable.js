@@ -33,19 +33,42 @@ const FilteringTable = () => {
 
   const { globalFilter, filters } = state;
 
-  // console.log("current filters", filters);
-
-  const handleClick = (e) => {
+  const [no, setNo] = useState(0)
+  const [firsName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [dateOfBirth, setDateOfBirth] = useState('')
+  const [country, setCountry] = useState('')
+  const [phone, setPhone] = useState('')
+  
+  const handleClick = () => {
     setAllFilters(
-      {
-        id: "id",
-        value: 12,
-      }
-      // {
-      //   id: "first_name",
-      //   value: "Enoch",
-      // }
-    );
+      [
+        {
+          id: 'id',
+          value: no
+        },
+        {
+          id: 'first_name',
+          value: firsName
+        },
+        {
+          id: 'last_name',
+          value: lastName
+        },
+        {
+          id: 'date_of_birth',
+          value: dateOfBirth
+        },
+        {
+          id: 'country',
+          value: country
+        },
+        {
+          id: 'phone',
+          value: phone
+        }
+      ]
+    )
   };
 
   return (
@@ -58,7 +81,7 @@ const FilteringTable = () => {
           <div className={"col-75"}>
             <input
               type={"number"}
-              onChange={(e) => setFilter("id", e.target.value)}
+              onChange={(e) => setNo(e.target.value)}
               placeholder="ID"
             />
           </div>
@@ -70,7 +93,7 @@ const FilteringTable = () => {
           <div className="col-75">
             <input
               type={"text"}
-              onChange={(e) => setFilter("first_name", e.target.value)}
+              onChange={(e) => setFirstName(e.target.value)}
               placeholder="First name"
             />
           </div>
@@ -83,7 +106,7 @@ const FilteringTable = () => {
           <div className="col-75">
             <input
               type={"text"}
-              onChange={(e) => setFilter("last_name", e.target.value)}
+              onChange={(e) => setLastName(e.target.value)}
               placeholder="Last name"
             />
           </div>
@@ -96,7 +119,7 @@ const FilteringTable = () => {
           <div className="col-75">
             <input
               type={"date"}
-              onChange={(e) => setFilter("date_of_birth", e.target.value)}
+              onChange={(e) => setDateOfBirth(e.target.value)}
             />
           </div>
         </div>
@@ -108,7 +131,7 @@ const FilteringTable = () => {
           <div className="col-75">
             <input
               type={"text"}
-              onChange={(e) => setFilter("country", e.target.value)}
+              onChange={(e) => setCountry(e.target.value)}
               placeholder="Country"
             />
           </div>
@@ -121,7 +144,7 @@ const FilteringTable = () => {
           <div className="col-75">
             <input
               type={"phone"}
-              onChange={(e) => setFilter("phone", e.target.value)}
+              onChange={(e) => setPhone(e.target.value)}
               placeholder="Phone number"
             />
           </div>
@@ -130,8 +153,6 @@ const FilteringTable = () => {
         <input type={"submit"} onClick={handleClick} value={"Search"} />
       </div>
 
-      {/* <input />
-      <input /> */}
       {/* <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} /> */}
       <table {...getTableProps()}>
         <thead>
