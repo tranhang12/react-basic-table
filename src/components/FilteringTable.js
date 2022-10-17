@@ -43,8 +43,8 @@ const FilteringTable = () => {
   const handleSubmitClick = () => {
     setAllFilters([
       {
-        id: "id",
-        value: no,
+        id: 'id',
+        value: no
       },
       {
         id: "first_name",

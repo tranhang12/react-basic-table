@@ -1,6 +1,5 @@
 import {format} from 'date-fns'
 import { ColumnFilter } from './ColumnFilter'
-import { NumberRangeColumnFilter } from './Test'
 export const COLUMNS = [
     {
         Header: 'ID',
@@ -32,14 +31,14 @@ export const COLUMNS = [
         Header: 'Country',
         Footer: 'Country',
         accessor: 'country',
-        Filter: 'includes'
+        Filter: ColumnFilter
     },
     {
         Header: 'Phone',
         Footer: 'Phone',
         accessor: 'phone',
         Filter: ColumnFilter
-    }
+    },
 ]
 
 export const GROUPED_COLUMNS = [
